@@ -1,6 +1,11 @@
 import styled from "styled-components";
 import logo from './../assets/images/logo.svg'
 import home from './../assets/images/home-icon.svg'
+import search from './../assets/images/search-icon.svg'
+import watchlist from './../assets/images/watchlist-icon.svg'
+import originals from './../assets/images/original-icon.svg'
+import movies from './../assets/images/movie-icon.svg'
+import series from './../assets/images/series-icon.svg'
 
 const Header = (props) => {
     return (
@@ -13,7 +18,28 @@ const Header = (props) => {
                     <img src={home} alt="Home"/> 
                     <span>HOME</span>
                 </a>
+                <a href="/search">
+                    <img src={search} alt="Search"/>
+                    <span>SEARCH</span>
+                </a>
+                <a href="/watchlist">
+                    <img src={watchlist} alt="Watchlist"/>
+                    <span>WATCHLIST</span>
+                </a>
+                <a href="/originals">
+                    <img src={originals} alt="Originals"/>
+                    <span>ORIGINALS</span>
+                </a>
+                <a href="/movies">
+                    <img src={movies} alt="Movies"/>
+                    <span>MOVIES</span>
+                </a>
+                <a href="/series">
+                    <img src={series} alt="Series"/>
+                    <span>SERIES</span>
+                </a>
             </NavMenu>
+            <Login>Login</Login>
         </Nav>
     )
 }
@@ -110,9 +136,26 @@ const NavMenu = styled.div`
 
     }
 
-    /* @media (max-width: 768px){
+    @media (max-width: 768px){
         display: none;
-    } */
+    }
+`
+
+const Login = styled.a`
+    background-color: rgba(0,0,0,0.6);
+    padding: 8px 16px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border: 1px solid #f9f9f9;
+    border-radius: 6px;
+    transition: all 200ms ease 0s;
+
+    &:hover{
+        background-color: #f9f9f9;
+        color: #000000;
+        border-color: transparent;
+        cursor: pointer;
+    }
 `
 
 export default Header;
