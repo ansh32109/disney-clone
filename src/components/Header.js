@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { useDispatch , useSelector } from "react-redux";
+//import {useNavigate} from 'react-router-dom';
 import logo from './../assets/images/logo.svg'
 import home from './../assets/images/home-icon.svg'
 import search from './../assets/images/search-icon.svg'
@@ -7,14 +9,29 @@ import originals from './../assets/images/original-icon.svg'
 import movies from './../assets/images/movie-icon.svg'
 import series from './../assets/images/series-icon.svg'
 import { auth, provider } from "../firebase";
+import { selectUserEmail , selectUserName , selectUserPhoto, setUserLoginDetails } from "../features/users/userSlice";
 
 const Header = (props) => {
+    const dispatch = useDispatch();
+   // const history = useNavigate();
+    const userName = useSelector(selectUserName);
+    const email = useSelector(selectUserEmail);
+    const photo = useSelector(selectUserPhoto);
+
     const handleAuth = () => {
         auth.signInWithPopup(provider).then((result) => {
-            console.log(result);
+            setUser(result.user);
         }).catch((error) => {
             alert(error.message);
         });
+    }
+
+    const setUser = (user) => {
+        dispatch(setUserLoginDetails({
+            name: user.displayName,
+            email: user.email,
+            photo: user.photoURL,
+        }));
     }
 
     return (
@@ -22,33 +39,40 @@ const Header = (props) => {
             <Logo>
                 <img src={logo} alt='Disney+'/>
             </Logo> 
-            <NavMenu>
-                <a href="/home">
-                    <img src={home} alt="Home"/> 
-                    <span>HOME</span>
-                </a>
-                <a href="/search">
-                    <img src={search} alt="Search"/>
-                    <span>SEARCH</span>
-                </a>
-                <a href="/watchlist">
-                    <img src={watchlist} alt="Watchlist"/>
-                    <span>WATCHLIST</span>
-                </a>
-                <a href="/originals">
-                    <img src={originals} alt="Originals"/>
-                    <span>ORIGINALS</span>
-                </a>
-                <a href="/movies">
-                    <img src={movies} alt="Movies"/>
-                    <span>MOVIES</span>
-                </a>
-                <a href="/series">
-                    <img src={series} alt="Series"/>
-                    <span>SERIES</span>
-                </a>
-            </NavMenu>
+
+            {!userName?
             <Login onClick={handleAuth}>Login</Login>
+            :
+            <>  
+                <NavMenu>
+                    <a href="/home">
+                        <img src={home} alt="Home"/> 
+                        <span>HOME</span>
+                    </a>
+                    <a href="/search">
+                        <img src={search} alt="Search"/>
+                        <span>SEARCH</span>
+                    </a>
+                    <a href="/watchlist">
+                        <img src={watchlist} alt="Watchlist"/>
+                        <span>WATCHLIST</span>
+                    </a>
+                    <a href="/originals">
+                        <img src={originals} alt="Originals"/>
+                        <span>ORIGINALS</span>
+                    </a>
+                    <a href="/movies">
+                        <img src={movies} alt="Movies"/>
+                        <span>MOVIES</span>
+                    </a>
+                    <a href="/series">
+                        <img src={series} alt="Series"/>
+                        <span>SERIES</span>
+                    </a>
+                </NavMenu>
+                <UserImg src={photo} alt={userName}/>
+            </>}    
+
         </Nav>
     )
 }
@@ -165,6 +189,12 @@ const Login = styled.a`
         border-color: transparent;
         cursor: pointer;
     }
+`
+
+const UserImg = styled.img`
+    height: 70%;
+    border: 1px transparent #f9f9f9;
+    border-radius: 999px;
 `
 
 export default Header;
