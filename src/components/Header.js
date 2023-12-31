@@ -9,7 +9,7 @@ import originals from './../assets/images/original-icon.svg'
 import movies from './../assets/images/movie-icon.svg'
 import series from './../assets/images/series-icon.svg'
 import { auth, provider } from "../firebase";
-import { selectUserEmail , selectUserName , selectUserPhoto, setUserLoginDetails } from "../features/users/userSlice";
+import { selectUserEmail , selectUserName , selectUserPhoto, setSignOutState, setUserLoginDetails } from "../features/users/userSlice";
 import { useEffect } from "react";
 
 const Header = (props) => {
@@ -29,11 +29,22 @@ const Header = (props) => {
     } , [userName])
 
     const handleAuth = () => {
-        auth.signInWithPopup(provider).then((result) => {
-            setUser(result.user);
-        }).catch((error) => {
-            alert(error.message);
-        });
+        if (!userName){
+            auth.signInWithPopup(provider).then((result) => {
+                setUser(result.user);
+            }).catch((error) => {
+                alert(error.message);
+            });
+        }
+        else if(userName){
+            auth.signOut().then(() => {
+                dispatch(setSignOutState());
+                navigate('/');
+            }).catch((error) => {
+                alert(error.message);
+            })
+        }
+        
     }
 
     const setUser = (user) => {
